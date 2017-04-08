@@ -1,0 +1,30 @@
+---
+- hosts: all
+
+  vars:
+    base_packages:
+      - jenkins
+      - nginx
+      - curl
+
+  tasks:
+    - name: Instalar clave pública de Jenkins
+      #apt_key: url=https://jenkins-ci.org/debian/jenkins-ci.org.key state=present
+      apt_key: url=https://pkg.jenkins.io/debian/jenkins.io.key state=present
+
+    - name: Añadir URL de repositorio Jenkins al sistema
+      apt_repository: repo='deb https://pkg.jenkins.io/debian binary/' state=present update_cache=yes
+
+    - name: Instalar Jenkins y sus dependencias
+      apt: name=jenkins state=latest update_cache=yes cache_valid_time=3600
+      #with_items: base_packages
+
+    - name: Iniciar servicio Jenkins
+      service: name=jenkins state=started enabled=yes
+      
+
+
+# wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+# deb https://pkg.jenkins.io/debian binary/
+# sudo apt-get update
+# sudo apt-get install jenkins
