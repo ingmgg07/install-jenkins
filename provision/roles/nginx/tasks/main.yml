@@ -1,0 +1,9 @@
+---
+
+- name: Instalar Nginx y sus dependencias
+  apt: name={{item}} state=latest update_cache=yes cache_valid_time=3600
+  with_items: "{{ nginx_packages }}"
+
+
+#- name: Eliminar fichero configuracion defecto de Nginx
+#  file: path: /etc/nginx/sites-enabled/default state=absent
